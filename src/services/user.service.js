@@ -6,9 +6,10 @@ const jwtProvider=require("../config/jwtProvider")
 const createUser = async (userData)=>{
     try {
 
-        const {firstName,lastName,email,password}=userData;
+        let {firstName,lastName,email,password}=userData;
 
-        const isUserExist=await User.find({email});
+        const isUserExist=await User.findOne({email});
+
 
         if(isUserExist){
             throw new Error("user already exist with email : ",email)
@@ -17,6 +18,8 @@ const createUser = async (userData)=>{
         password=await bcrypt.hash(password,8);
     
         const user=await User.create({firstName,lastName,email,password})
+
+        console.log("user ",user)
     
         return user;
         
@@ -35,7 +38,7 @@ const findUserById=async(userId)=>{
         }
         return user;
     } catch (error) {
-        console.log("error :- ",error)
+        console.log("error :------- ",error.message)
         throw new Error(error.message)
     }
 }
@@ -43,7 +46,7 @@ const findUserById=async(userId)=>{
 const getUserByEmail=async(email)=>{
     try {
 
-        const user=await User.find({email});
+        const user=await User.findOne({email});
 
         if(!user){
             throw new Error("user found with email : ",email)
@@ -62,13 +65,28 @@ const getUserProfileByToken=async(token)=>{
 
         const userId=jwtProvider.getUserIdFromToken(token)
 
-        const user=findUserById(userId)
+        console.log("userr id ",userId)
+
+
+        const user= await findUserById(userId);
+        user.password=null;
+        
         if(!user){
             throw new Error("user not exist with id : ",userId)
         }
         return user;
     } catch (error) {
-        console.log("error - ",error.message)
+        console.log("error ----- ",error.message)
+        throw new Error(error.message)
+    }
+}
+
+const getAllUsers=async()=>{
+    try {
+        const users=await User.find();
+        return users;
+    } catch (error) {
+        console.log("error - ",error)
         throw new Error(error.message)
     }
 }
@@ -77,5 +95,6 @@ module.exports={
     createUser,
     findUserById,
     getUserProfileByToken,
-    getUserByEmail
+    getUserByEmail,
+    getAllUsers
 }
