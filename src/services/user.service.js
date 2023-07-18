@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('../modals/user.moda');
+const User = require('../models/user.model.js');
 const jwtProvider=require("../config/jwtProvider")
 
 const createUser = async (userData)=>{
