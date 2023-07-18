@@ -1,8 +1,4 @@
-# ecommerce-node
 
-Sure, I can help you generate API documentation for your Node.js and Express application using the provided OpenAPI specification. You can use tools like Swagger UI or ReDoc to visualize and interact with the generated documentation.
-
-Here's a sample Markdown document for your API documentation:
 
 # API Documentation for Ecommerce Project API with Node.js and Express
 
