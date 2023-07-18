@@ -109,4 +109,4 @@ For any queries or issues, please contact **Code With Zosh** at `codewithzosh`.
 
 This API is licensed under **Code With Zosh**.
 
-Please note that this is just a template for the documentation, and you can customize it according to your specific needs. You can use the Swagger UI or ReDoc libraries to render this documentation using the OpenAPI specification. Also, don't forget to include relevant descriptions for the request/response payloads and any additional information that users may need to understand and use your API effectively.
+
