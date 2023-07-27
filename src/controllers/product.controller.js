@@ -34,14 +34,14 @@ async function updateProduct(req, res) {
 }
 
 // Get all products
-async function getAllProducts(req, res) {
-  try {
-    const products = await productService.getAllProducts();
-    res.json(products);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-}
+// async function getAllProducts(req, res) {
+//   try {
+//     const products = await productService.getAllProducts();
+//     res.json(products);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// }
 
 // Find a product by ID
 async function findProductById(req, res) {
@@ -50,7 +50,7 @@ async function findProductById(req, res) {
     const product = await productService.findProductById(productId);
     return res.status(200).send(product);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    return res.status(404).json({ message: err.message });
   }
 }
 
@@ -79,31 +79,12 @@ async function searchProduct(req, res) {
 // Get all products with filtering and pagination
 async function getAllProducts(req, res) {
   try {
-    const {
-      category,
-      colors,
-      sizes,
-      minPrice,
-      maxPrice,
-      minDiscount,
-      sort,
-      stock,
-      pageNumber,
-      pageSize,
-    } = req.query;
-    const products = await productService.getAllProducts(
-      category,
-      colors,
-      sizes,
-      minPrice,
-      maxPrice,
-      minDiscount,
-      sort,
-      stock,
-      pageNumber,
-      pageSize
-    );
-    return res.status(200).send(products);
+
+    const products = await productService.getAllProducts(req.query);
+    const totalProducts = products.length;
+    const totalPages = Math.ceil(totalProducts / req.query.pageSize);
+    return res.status(200).send({content:products,currentPage: req.query.pageNumber,
+      totalPages,});
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

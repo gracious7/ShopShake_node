@@ -9,7 +9,6 @@ const findUserCart = async (req, res) => {
     try {
       const user = req.user;
       const cart = await cartService.findUserCart(user.id);
-      console.log("cart - ", cart.user.email);
       res.status(200).json(cart);
     } catch (error) {
       // Handle error here and send appropriate response
@@ -21,7 +20,7 @@ const findUserCart = async (req, res) => {
   const addItemToCart = async (req, res) => {
     try {
       const user = req.user;
-      await cartService.addCartItem(user._id, req.body);
+      await cartService.addCartItem(user._id.toString(), req.body);
      
       res.status(202).json({message:"Item Added To Cart Successfully", status:true});
     } catch (error) {

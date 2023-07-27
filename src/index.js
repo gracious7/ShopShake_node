@@ -25,4 +25,10 @@ app.use("/api/admin/products",adminProductRouter);
 const cartRouter=require("./routes/cart.routes.js")
 app.use("/api/cart", cartRouter);
 
-module.exports={app}
+const cartItemRouter=require("./routes/cartItem.routes.js")
+app.use("/api/cart_items",cartItemRouter);
+
+const orderRouter=require("./routes/order.routes.js");
+app.use("/api/orders/",orderRouter);
+
+module.exports={app};

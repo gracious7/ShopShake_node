@@ -1,6 +1,7 @@
 const Address = require("../models/address.model.js");
 const Order = require("../models/order.model.js");
 const OrderItem = require("../models/orderItems.js");
+const cartService=require("../services/cart.service.js")
 
 
 async function createOrder(user, shippAddress) {
@@ -11,7 +12,7 @@ async function createOrder(user, shippAddress) {
   user.addresses.push(address);
   await user.save();
 
-  const cart = await findUserCart(user._id);
+  const cart = await cartService.findUserCart(user._id);
   const orderItems = [];
 
   for (const item of cart.cartItems) {
@@ -22,6 +23,7 @@ async function createOrder(user, shippAddress) {
       size: item.size,
       userId: item.userId,
       discountedPrice: item.discountedPrice,
+      
     });
 
     const createdOrderItem = await orderItem.save();
@@ -44,10 +46,10 @@ async function createOrder(user, shippAddress) {
 
   const savedOrder = await createdOrder.save();
 
-  for (const item of orderItems) {
-    item.order = savedOrder;
-    await item.save();
-  }
+  // for (const item of orderItems) {
+  //   item.order = savedOrder;
+  //   await item.save();
+  // }
 
   return savedOrder;
 }
@@ -84,10 +86,16 @@ async function cancelledOrder(orderId) {
 }
 
 async function findOrderById(orderId) {
-  const order = await Order.findById(orderId);
+  const order = await Order.findById(orderId).populate("orderItems").populate("shippingAddress");
+  const orderItems=[];
+  for(itemId of order.orderItems){
+    const orderItem=await OrderItem.findById(itemId).populate("product");
+    orderItems.push(orderItem)
+  }
   if (!order) {
     throw new Error(`Order not found with id ${orderId}`);
   }
+  order.orderItems=orderItems;
   return order;
 }
 
