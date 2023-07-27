@@ -29,6 +29,9 @@ const cartItemRouter=require("./routes/cartItem.routes.js")
 app.use("/api/cart_items",cartItemRouter);
 
 const orderRouter=require("./routes/order.routes.js");
-app.use("/api/orders/",orderRouter);
+app.use("/api/orders",orderRouter);
+
+const paymentRouter=require("./routes/payment.routes.js");
+app.use('/api/payments',paymentRouter)
 
 module.exports={app};

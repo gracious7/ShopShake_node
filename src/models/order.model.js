@@ -31,6 +31,12 @@ const orderSchema = new Schema({
     transactionId: {
       type: String,
     },
+    paymentId:{
+      type:String,
+    },
+    paymentStatus:{
+      type:String
+    }
     
   },
   totalPrice: {

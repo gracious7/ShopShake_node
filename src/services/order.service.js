@@ -86,7 +86,7 @@ async function cancelledOrder(orderId) {
 }
 
 async function findOrderById(orderId) {
-  const order = await Order.findById(orderId).populate("orderItems").populate("shippingAddress");
+  const order = await Order.findById(orderId).populate("user").populate("orderItems").populate("shippingAddress");
   const orderItems=[];
   for(itemId of order.orderItems){
     const orderItem=await OrderItem.findById(itemId).populate("product");
