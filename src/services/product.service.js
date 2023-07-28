@@ -158,7 +158,6 @@ async function getAllProducts(reqQuery) {
 
   const totalPages = Math.ceil(totalProducts / pageSize);
 
-  // console.log(pageNumber,totalProducts,pageSize)
 
   return { content: products, currentPage: pageNumber, totalPages:totalPages };
 }
