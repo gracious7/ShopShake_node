@@ -4,15 +4,15 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    // required: true,
   },
   description: {
     type: String,
-    required: true,
+    // required: true,
   },
   price: {
     type: Number,
-    required: true,
+    // required: true,
   },
   discountedPrice: {
     type: Number,
@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema({
   },
   quantity: {
     type: Number,
-    required: true,
+    // required: true,
   },
   brand: {
     type: String,

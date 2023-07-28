@@ -92,31 +92,48 @@ async function cancelledOrder(orderId) {
 async function findOrderById(orderId) {
   const order = await Order.findById(orderId)
     .populate("user")
-    .populate("orderItems")
+    .populate({path:"orderItems", populate:{path:"product"}})
     .populate("shippingAddress");
-  const orderItems = [];
-  for (itemId of order.orderItems) {
-    const orderItem = await OrderItem.findById(itemId).populate("product");
-    orderItems.push(orderItem);
-  }
-  if (!order) {
-    throw new Error(`Order not found with id ${orderId}`);
-  }
-  order.orderItems = orderItems;
+  
   return order;
 }
 
 async function usersOrderHistory(userId) {
-  return await Order.find({ user: userId });
+  try {
+    const orders = await Order.find({
+      user: userId,
+      orderStatus: "PLACED",
+    })
+      .populate({
+        path: "orderItems",
+        populate: {
+          path: "product",
+        },
+      })
+      .lean();
+
+
+    return orders;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 }
 
 async function getAllOrders() {
-  return await Order.find();
+  return await Order.find().populate({
+    path: "orderItems",
+    populate: {
+      path: "product",
+    },
+  })
+  .lean();;
 }
 
 async function deleteOrder(orderId) {
   const order = await findOrderById(orderId);
-  await order.remove();
+  if(!order)throw new Error("order not found with id ",orderId)
+
+  await Order.findByIdAndDelete(orderId);
 }
 
 module.exports = {

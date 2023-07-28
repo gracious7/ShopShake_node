@@ -4,6 +4,7 @@ const productController=require("../controllers/product.controller.js");
 
 
 router.post('/', productController.createProduct);
+router.post('/creates', productController.createMultipleProduct);
 router.delete('/:id', productController.deleteProduct);
 router.put('/:id', productController.updateProduct);
 

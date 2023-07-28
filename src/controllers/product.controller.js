@@ -27,7 +27,7 @@ async function updateProduct(req, res) {
   try {
     const productId = req.params.id;
     const product = await productService.updateProduct(productId, req.body);
-    res.json(product);
+    return res.json(product);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -81,14 +81,23 @@ async function getAllProducts(req, res) {
   try {
 
     const products = await productService.getAllProducts(req.query);
-    const totalProducts = products.length;
-    const totalPages = Math.ceil(totalProducts / req.query.pageSize);
-    return res.status(200).send({content:products,currentPage: req.query.pageNumber,
-      totalPages,});
+
+    return res.status(200).send(products);
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
 }
+
+const createMultipleProduct= async (req, res) => {
+  try {
+    await productService.createMultipleProduct(req.body)
+    res
+      .status(202)
+      .json({ message: "Products Created Successfully", success: true });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
 
 module.exports = {
   createProduct,
@@ -98,5 +107,6 @@ module.exports = {
   findProductById,
   findProductByCategory,
   searchProduct,
+  createMultipleProduct
 
 };
