@@ -7,7 +7,7 @@ app.use(express.json())
 app.use(cors())
 
 app.get("/",(req,res)=>{
-    return res.status(200).send({message:"welcome to ecommerce api"})
+    return res.status(200).send({message:"welcome to ecommerce api - node"})
 })
 
 const authRouter=require("./routes/auth.routes.js")
@@ -33,5 +33,15 @@ app.use("/api/orders",orderRouter);
 
 const paymentRouter=require("./routes/payment.routes.js");
 app.use('/api/payments',paymentRouter)
+
+const reviewRouter=require("./routes/review.routes.js");
+app.use("/api/reviews",reviewRouter);
+
+const ratingRouter=require("./routes/rating.routes.js");
+app.use("/api/ratings",ratingRouter);
+
+// admin routes handler
+const adminOrderRoutes=require("./routes/adminOrder.routes.js");
+app.use("/api/admin/orders",adminOrderRoutes);
 
 module.exports={app};

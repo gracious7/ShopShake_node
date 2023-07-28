@@ -56,26 +56,26 @@ async function createOrder(user, shippAddress) {
 
 async function placedOrder(orderId) {
   const order = await findOrderById(orderId);
-  order.orderStatus = 'PLACED'; // Assuming OrderStatus is a string enum or a valid string value
-  order.paymentDetails.status = 'COMPLETED'; // Assuming PaymentStatus is nested under 'paymentDetails'
+  order.orderStatus = 'PLACED'; 
+  order.paymentDetails.status = 'COMPLETED'; 
   return await order.save();
 }
 
 async function confirmedOrder(orderId) {
   const order = await findOrderById(orderId);
-  order.orderStatus = 'CONFIRMED'; // Assuming OrderStatus is a string enum or a valid string value
+  order.orderStatus = 'CONFIRMED'; 
   return await order.save();
 }
 
-async function shippedOrder(orderId) {
+async function shipOrder(orderId) {
   const order = await findOrderById(orderId);
-  order.orderStatus = 'SHIPPED'; // Assuming OrderStatus is a string enum or a valid string value
+  order.orderStatus = 'SHIPPED'; 
   return await order.save();
 }
 
 async function deliveredOrder(orderId) {
   const order = await findOrderById(orderId);
-  order.orderStatus = 'DELIVERED'; // Assuming OrderStatus is a string enum or a valid string value
+  order.orderStatus = 'DELIVERED'; 
   return await order.save();
 }
 
@@ -116,7 +116,7 @@ module.exports = {
   createOrder,
   placedOrder,
   confirmedOrder,
-  shippedOrder,
+  shipOrder,
   deliveredOrder,
   cancelledOrder,
   findOrderById,
