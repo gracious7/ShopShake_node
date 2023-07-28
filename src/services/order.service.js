@@ -1,16 +1,21 @@
 const Address = require("../models/address.model.js");
 const Order = require("../models/order.model.js");
 const OrderItem = require("../models/orderItems.js");
-const cartService=require("../services/cart.service.js")
-
+const cartService = require("../services/cart.service.js");
 
 async function createOrder(user, shippAddress) {
-  const address = new Address(shippAddress);
-  address.user = user;
-  await address.save();
+  let address;
+  if (shippAddress._id) {
+    let existedAddress = await Address.findById(shippAddress._id);
+    address = existedAddress;
+  } else {
+    address = new Address(shippAddress);
+    address.user = user;
+    await address.save();
 
-  user.addresses.push(address);
-  await user.save();
+    user.addresses.push(address);
+    await user.save();
+  }
 
   const cart = await cartService.findUserCart(user._id);
   const orderItems = [];
@@ -23,7 +28,6 @@ async function createOrder(user, shippAddress) {
       size: item.size,
       userId: item.userId,
       discountedPrice: item.discountedPrice,
-      
     });
 
     const createdOrderItem = await orderItem.save();
@@ -39,8 +43,8 @@ async function createOrder(user, shippAddress) {
     totalItem: cart.totalItem,
     shippingAddress: address,
     orderDate: new Date(),
-    orderStatus: 'PENDING', // Assuming OrderStatus is a string enum or a valid string value
-    'paymentDetails.status': 'PENDING', // Assuming PaymentStatus is nested under 'paymentDetails'
+    orderStatus: "PENDING", // Assuming OrderStatus is a string enum or a valid string value
+    "paymentDetails.status": "PENDING", // Assuming PaymentStatus is nested under 'paymentDetails'
     createdAt: new Date(),
   });
 
@@ -56,46 +60,49 @@ async function createOrder(user, shippAddress) {
 
 async function placedOrder(orderId) {
   const order = await findOrderById(orderId);
-  order.orderStatus = 'PLACED'; 
-  order.paymentDetails.status = 'COMPLETED'; 
+  order.orderStatus = "PLACED";
+  order.paymentDetails.status = "COMPLETED";
   return await order.save();
 }
 
 async function confirmedOrder(orderId) {
   const order = await findOrderById(orderId);
-  order.orderStatus = 'CONFIRMED'; 
+  order.orderStatus = "CONFIRMED";
   return await order.save();
 }
 
 async function shipOrder(orderId) {
   const order = await findOrderById(orderId);
-  order.orderStatus = 'SHIPPED'; 
+  order.orderStatus = "SHIPPED";
   return await order.save();
 }
 
 async function deliveredOrder(orderId) {
   const order = await findOrderById(orderId);
-  order.orderStatus = 'DELIVERED'; 
+  order.orderStatus = "DELIVERED";
   return await order.save();
 }
 
 async function cancelledOrder(orderId) {
   const order = await findOrderById(orderId);
-  order.orderStatus = 'CANCELLED'; // Assuming OrderStatus is a string enum or a valid string value
+  order.orderStatus = "CANCELLED"; // Assuming OrderStatus is a string enum or a valid string value
   return await order.save();
 }
 
 async function findOrderById(orderId) {
-  const order = await Order.findById(orderId).populate("user").populate("orderItems").populate("shippingAddress");
-  const orderItems=[];
-  for(itemId of order.orderItems){
-    const orderItem=await OrderItem.findById(itemId).populate("product");
-    orderItems.push(orderItem)
+  const order = await Order.findById(orderId)
+    .populate("user")
+    .populate("orderItems")
+    .populate("shippingAddress");
+  const orderItems = [];
+  for (itemId of order.orderItems) {
+    const orderItem = await OrderItem.findById(itemId).populate("product");
+    orderItems.push(orderItem);
   }
   if (!order) {
     throw new Error(`Order not found with id ${orderId}`);
   }
-  order.orderItems=orderItems;
+  order.orderItems = orderItems;
   return order;
 }
 
