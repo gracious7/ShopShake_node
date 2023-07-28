@@ -8,7 +8,6 @@ const getAllOrders = async (req, res) => {
   } catch (error) {
     res.status(500).send({ error: "Something went wrong" });
   }
-//   hello
 };
 
 const confirmedOrder = (req, res) => {
