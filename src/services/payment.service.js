@@ -22,7 +22,7 @@ const createPaymentLink= async (orderId)=>{
             email: true,
           },
           reminder_enable: true,
-          callback_url: `https://ecommerce-codewithzosh.vercel.app/payment/${orderId}`,
+          callback_url: `https://codewithzosh-ecommerce-mern.vercel.app/payment/${orderId}`,
           callback_method: 'get',
         };
     
