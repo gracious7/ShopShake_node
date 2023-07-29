@@ -117,12 +117,15 @@ async function getAllProducts(reqQuery) {
   }
 
   if (color) {
-    const colorSet = new Set(color.split(","));
-    query = query.where("color").in([...colorSet]);
+    const colorSet = new Set(color.split(",").map(color => color.trim().toLowerCase()));
+    const colorRegex = colorSet.size > 0 ? new RegExp([...colorSet].join("|"), "i") : null;
+    query = query.where("color").regex(colorRegex);
+    // query = query.where("color").in([...colorSet]);
   }
 
   if (sizes) {
     const sizesSet = new Set(sizes);
+    
     query = query.where("sizes.name").in([...sizesSet]);
   }
 
