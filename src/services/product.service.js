@@ -162,12 +162,23 @@ async function getAllProducts(reqQuery) {
   const totalPages = Math.ceil(totalProducts / pageSize);
 
 
-  return { content: products, currentPage: pageNumber, totalPages:totalPages };
+  return {totalElements:totalProducts, content: products, currentPage: pageNumber, totalPages:totalPages };
 }
 
 async function createMultipleProduct(products) {
   for (let product of products) {
     await createProduct(product);
+  }
+}
+
+async function getRecentProduct(){
+  try {
+    const products=await Product.find().sort({ createdAt: -1 })
+    .limit(10);
+    return products;
+    
+  } catch (error) {
+    throw new Error(error.message)
   }
 }
 
@@ -178,4 +189,5 @@ module.exports = {
   getAllProducts,
   findProductById,
   createMultipleProduct,
+  getRecentProduct
 };

@@ -1,5 +1,5 @@
 // productController.js
-const productService = require("../services/product.service.js")
+const productService = require("../services/product.service.js");
 
 // Create a new product
 async function createProduct(req, res) {
@@ -79,7 +79,6 @@ async function searchProduct(req, res) {
 // Get all products with filtering and pagination
 async function getAllProducts(req, res) {
   try {
-
     const products = await productService.getAllProducts(req.query);
 
     return res.status(200).send(products);
@@ -88,12 +87,21 @@ async function getAllProducts(req, res) {
   }
 }
 
-const createMultipleProduct= async (req, res) => {
+const createMultipleProduct = async (req, res) => {
   try {
-    await productService.createMultipleProduct(req.body)
+    await productService.createMultipleProduct(req.body);
     res
       .status(202)
       .json({ message: "Products Created Successfully", success: true });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+const getRecentProduct = async (req, res) => {
+  try {
+    const products = await productService.getRecentProduct();
+    res.status(202).json(products);
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });
   }
@@ -107,6 +115,6 @@ module.exports = {
   findProductById,
   findProductByCategory,
   searchProduct,
-  createMultipleProduct
-
+  createMultipleProduct,
+  getRecentProduct,
 };
